@@ -14,8 +14,8 @@ class KartuKeluargaController extends Controller
      */
     public function index()
     {
-        $data = KartuKeluarga::latest()->get();
-        return view('kartu_keluarga.index', compact('data'));
+    $data = KartuKeluarga::with('desa')->latest()->get();
+    return view('kartu_keluarga.index', compact('data'));
     }
 
     /**
@@ -42,14 +42,13 @@ class KartuKeluargaController extends Controller
             'alamat' => 'required',
             'rt' => 'required',
             'rw' => 'required',
-            'desa' => 'required',
-            'kecamatan' => 'required',
-            'kabupaten' => 'required',
+            'desa_id' => 'required|exists:wilayah,kode',
             'kode_pos' => 'required',
             'tanggal_terbit' => 'required|date',
         ]);
 
         KartuKeluarga::create($validated);
+
         return redirect()->route('kartu-keluarga.index')->with('success', 'Data KK berhasil ditambahkan.');
     }
 

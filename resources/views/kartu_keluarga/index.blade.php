@@ -34,9 +34,9 @@
                                     <td class="border px-2">{{ $kk->kepala_keluarga }}</td>
                                     <td class="border px-2">{{ $kk->alamat }}</td>
                                     <td class="border px-2">{{ $kk->rt }}/{{ $kk->rw }}</td>
-                                    <td class="border px-2">{{ $kk->desa }}</td>
-                                    <td class="border px-2">{{ $kk->kecamatan }}</td>
-                                    <td class="border px-2">{{ $kk->kabupaten }}</td>
+                                    <td class="border px-2">{{ $kk->desa->nama ?? '-' }}</td>
+                                    <td class="border px-2">{{ $kk->desa ? getWilayahNama($kk->desa->kode, 'kecamatan') : '-' }}</td>
+                                    <td class="border px-2">{{ $kk->desa ? getWilayahNama($kk->desa->kode, 'kabupaten') : '-' }}</td>
                                     <td class="border px-2">{{ $kk->kode_pos }}</td>
                                     <td class="border px-2">{{ $kk->tanggal_terbit }}</td>
                                 </tr>
@@ -82,16 +82,28 @@
                     <input type="text" name="rw" class="w-full border rounded px-3 py-2" required>
                 </div>
                 <div>
-                    <label class="block">Desa</label>
-                    <input type="text" name="desa" class="w-full border rounded px-3 py-2" required>
+                    <label class="block">Provinsi</label>
+                    <select id="provinsi" class="w-full border rounded px-3 py-2" required>
+                        <option value="">-- Pilih Provinsi --</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block">Kabupaten/Kota</label>
+                    <select id="kabupaten" class="w-full border rounded px-3 py-2" required>
+                        <option value="">-- Pilih Kabupaten --</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block">Kecamatan</label>
-                    <input type="text" name="kecamatan" class="w-full border rounded px-3 py-2" required>
+                    <select id="kecamatan" class="w-full border rounded px-3 py-2" required>
+                        <option value="">-- Pilih Kecamatan --</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="block">Kabupaten</label>
-                    <input type="text" name="kabupaten" class="w-full border rounded px-3 py-2" required>
+                    <label class="block">Desa</label>
+                    <select name="desa_id" id="desa" class="w-full border rounded px-3 py-2" required>
+                        <option value="">-- Pilih Desa --</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block">Kode Pos</label>
@@ -118,6 +130,61 @@
             modal.classList.add('hidden');
         }
     }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    fetch('/wilayah/provinsi')
+        .then(res => res.json())
+        .then(data => {
+            const provinsi = document.getElementById('provinsi');
+            data.forEach(item => {
+                provinsi.innerHTML += `<option value="${item.kode}">${item.nama}</option>`;
+            });
+        });
+
+    document.getElementById('provinsi').addEventListener('change', function () {
+        fetch(`/wilayah/kabupaten?kode_provinsi=${this.value}`)
+            .then(res => res.json())
+            .then(data => {
+                let kabupaten = document.getElementById('kabupaten');
+                kabupaten.innerHTML = `<option value="">-- Pilih Kabupaten --</option>`;
+                data.forEach(item => {
+                    kabupaten.innerHTML += `<option value="${item.kode}">${item.nama}</option>`;
+                });
+
+                // reset kecamatan & desa
+                document.getElementById('kecamatan').innerHTML = `<option value="">-- Pilih Kecamatan --</option>`;
+                document.getElementById('desa').innerHTML = `<option value="">-- Pilih Desa --</option>`;
+            });
+    });
+
+    document.getElementById('kabupaten').addEventListener('change', function () {
+        fetch(`/wilayah/kecamatan?kode_kabupaten=${this.value}`)
+            .then(res => res.json())
+            .then(data => {
+                let kecamatan = document.getElementById('kecamatan');
+                kecamatan.innerHTML = `<option value="">-- Pilih Kecamatan --</option>`;
+                data.forEach(item => {
+                    kecamatan.innerHTML += `<option value="${item.kode}">${item.nama}</option>`;
+                });
+
+                // reset desa
+                document.getElementById('desa').innerHTML = `<option value="">-- Pilih Desa --</option>`;
+            });
+    });
+
+    document.getElementById('kecamatan').addEventListener('change', function () {
+        fetch(`/wilayah/desa?kode_kecamatan=${this.value}`)
+            .then(res => res.json())
+            .then(data => {
+                let desa = document.getElementById('desa');
+                desa.innerHTML = `<option value="">-- Pilih Desa --</option>`;
+                data.forEach(item => {
+                    desa.innerHTML += `<option value="${item.kode}">${item.nama}</option>`;
+                });
+            });
+    });
+});
 </script>
 
     </div>

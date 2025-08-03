@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KartuKeluargaController;
+use App\Http\Controllers\WilayahController;
 
 
 /*
@@ -36,6 +37,12 @@ Route::middleware(['auth', 'role:admin,sekretaris'])->group(function () {
     // Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create']);
     Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create', 'store']);
 });
+
+Route::get('/wilayah/provinsi', [WilayahController::class, 'getProvinsi']);
+Route::get('/wilayah/kabupaten', [WilayahController::class, 'getKabupaten']);
+Route::get('/wilayah/kecamatan', [WilayahController::class, 'getKecamatan']);
+Route::get('/wilayah/desa', [WilayahController::class, 'getDesa']);
+
 
 });
 

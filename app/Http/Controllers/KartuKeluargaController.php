@@ -55,15 +55,16 @@ class KartuKeluargaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'no_kk' => 'required|unique:kartu_keluargas',
-            'kepala_keluarga' => 'required',
-            'alamat' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
+            'no_kk' => 'required|digits_between:10,20|numeric|unique:kartu_keluargas,no_kk',
+            'kepala_keluarga' => 'required|string',
+            'alamat' => 'required|string',
+            'rt' => 'required|numeric',
+            'rw' => 'required|numeric',
             'desa_id' => 'required|exists:wilayah,kode',
-            'kode_pos' => 'required',
+            'kode_pos' => 'required|digits_between:4,6|numeric',
             'tanggal_terbit' => 'required|date',
         ]);
+
 
         KartuKeluarga::create($validated);
 
@@ -102,13 +103,13 @@ class KartuKeluargaController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'no_kk' => 'required|unique:kartu_keluargas,no_kk,' . $id,
-            'kepala_keluarga' => 'required',
-            'alamat' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
+            'no_kk' => 'required|digits_between:10,20|numeric|unique:kartu_keluargas,no_kk' . ($id ? ',' . $id : ''),
+            'kepala_keluarga' => 'required|string',
+            'alamat' => 'required|string',
+            'rt' => 'required|numeric',
+            'rw' => 'required|numeric',
             'desa_id' => 'required|exists:wilayah,kode',
-            'kode_pos' => 'required',
+            'kode_pos' => 'required|digits_between:4,6|numeric',
             'tanggal_terbit' => 'required|date',
         ]);
 

@@ -17,14 +17,24 @@ class KartuKeluargaController extends Controller
     {
         $query = KartuKeluarga::with('desa');
 
-        if ($request->has('cari')) {
+        if ($request->filled('cari')) {
             $query->where('kepala_keluarga', 'like', '%' . $request->cari . '%');
         }
 
-        $data = $query->paginate(10)->appends(request()->query()); // ✅ penting: withQueryString biar pagination tetap bawa query pencarian
+        if ($request->filled('no_kk')) {
+            $query->where('no_kk', 'like', '%' . $request->no_kk . '%');
+        }
+
+        if ($request->filled('sort_no_kk')) {
+            $sort = in_array($request->sort_no_kk, ['asc', 'desc']) ? $request->sort_no_kk : 'asc';
+            $query->orderBy('no_kk', $sort);
+        }
+
+        $data = $query->paginate(10)->appends(request()->query());
 
         return view('kartu_keluarga.index', compact('data'));
     }
+
 
     /**
      * Show the form for creating a new resource.

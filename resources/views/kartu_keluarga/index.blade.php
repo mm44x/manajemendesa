@@ -1,88 +1,113 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
             {{ __('Data Kartu Keluarga') }}
         </h2>
     </x-slot>
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <button onclick="toggleModal(true)"
-                class="mb-3 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                + Tambah KK
-            </button>
-            <form method="GET" class="mb-4 flex items-center gap-2">
-                <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari kepala keluarga..."
-                    class="px-3 py-2 border rounded w-64 bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
-                <button type="submit"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
-                    🔍 Cari
-                </button>
-                @if (request('cari'))
-                    <a href="{{ route('kartu-keluarga.index') }}"
-                        class="text-sm text-red-600 hover:underline dark:text-red-400">Reset</a>
-                @endif
-            </form>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
+                <div class="p-4 text-gray-900 ">
+                    <button clas onclick="toggleModal(true)"
+                        class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        + Tambah KK
+                    </button>
+                </div>
+                <div class="p-4 text-gray-900 ">
+                    <form method="GET" class="mb-1 flex flex-wrap items-center gap-2">
+                        <select name="sort_no_kk"
+                            class="px-3 py-2 border rounded min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                            <option value="">Urutkan</option>
+                            <option value="asc" {{ request('sort_no_kk') === 'asc' ? 'selected' : '' }}>No KK ASC
+                            </option>
+                            <option value="desc" {{ request('sort_no_kk') === 'desc' ? 'selected' : '' }}>No KK DESC
+                            </option>
+                        </select>
+                        <input type="text" name="no_kk" value="{{ request('no_kk') }}" placeholder="Cari No KK"
+                            class="px-3 py-2 border rounded bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        <input type="text" name="cari" value="{{ request('cari') }}"
+                            placeholder="Cari Kepala Keluarga"
+                            class="px-3 py-2 border rounded bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                            🔍 Filter
+                        </button>
+
+                        @if (request()->hasAny(['cari', 'no_kk', 'sort_no_kk']))
+                            <a href="{{ route('kartu-keluarga.index') }}"
+                                class="text-sm text-red-600 hover:underline dark:text-red-400">Reset</a>
+                        @endif
+                    </form>
+                </div>
+            </div>
 
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 text-gray-900 ">
-                    <table class="min-w-full border text-sm dark:bg-gray-900 dark:text-white">
-                        <thead class="bg-gray-200 dark:bg-gray-900 dark:text-white">
-                            <tr>
-                                <th class="border px-2">No KK</th>
-                                <th class="border px-2">Kepala Keluarga</th>
-                                <th class="border px-2">Alamat</th>
-                                <th class="border px-2">RT/RW</th>
-                                <th class="border px-2">Provinsi</th>
-                                <th class="border px-2">Kabupaten/Kota</th>
-                                <th class="border px-2">Kecamatan</th>
-                                <th class="border px-2">Desa</th>
-                                <th class="border px-2">Kode Pos</th>
-                                <th class="border px-2">Tanggal Terbit</th>
-                                <th class="border px-2">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($data as $kk)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border text-sm dark:bg-gray-900 dark:text-white">
+                            <thead class="bg-gray-200 dark:bg-gray-900 dark:text-white">
                                 <tr>
-                                    <td class="border px-2">{{ $kk->no_kk }}</td>
-                                    <td class="border px-2">{{ $kk->kepala_keluarga }}</td>
-                                    <td class="border px-2">{{ $kk->alamat }}</td>
-                                    <td class="border px-2">{{ $kk->rt }}/{{ $kk->rw }}</td>
-                                    <td class="border px-2">{{ getWilayahNama($kk->desa->kode ?? '', 'provinsi') }}</td>
-                                    <td class="border px-2">{{ getWilayahNama($kk->desa->kode ?? '', 'kabupaten') }}
-                                    </td>
-                                    <td class="border px-2">{{ getWilayahNama($kk->desa->kode ?? '', 'kecamatan') }}
-                                    </td>
-                                    <td class="border px-2">{{ $kk->desa->nama }}</td>
-                                    <td class="border px-2">{{ $kk->kode_pos }}</td>
-                                    <td class="border px-2">
-                                        {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td>
-                                    <td class="border px-2">
-                                        <a onclick="showEditModal(this)" data-id="{{ $kk->id }}"
-                                            data-no_kk="{{ $kk->no_kk }}"
-                                            data-kepala_keluarga="{{ $kk->kepala_keluarga }}"
-                                            data-alamat="{{ $kk->alamat }}" data-rt="{{ $kk->rt }}"
-                                            data-rw="{{ $kk->rw }}" data-desa_id="{{ $kk->desa_id }}"
-                                            data-kode_pos="{{ $kk->kode_pos }}"
-                                            data-tanggal_terbit="{{ $kk->tanggal_terbit }}"
-                                            class="text-blue-600 hover:underline cursor-pointer">
-                                            ✏️ Edit
-                                        </a>
-                                        <a onclick="confirmDelete({{ $kk->id }}, '{{ $kk->no_kk }}')"
-                                            class="text-red-600 hover:underline cursor-pointer">🗑️ Hapus</a>
-                                    </td>
+                                    <th class="border px-2 whitespace-nowrap">No KK</th>
+                                    <th class="border px-2 whitespace-nowrap">Kepala Keluarga</th>
+                                    <th class="border px-2 whitespace-nowrap">Alamat</th>
+                                    <th class="border px-2 whitespace-nowrap">RT/RW</th>
+                                    <th class="border px-2 whitespace-nowrap">Provinsi</th>
+                                    <th class="border px-2 whitespace-nowrap">Kabupaten/Kota</th>
+                                    <th class="border px-2 whitespace-nowrap">Kecamatan</th>
+                                    <th class="border px-2 whitespace-nowrap">Desa</th>
+                                    <th class="border px-2 whitespace-nowrap">Kode Pos</th>
+                                    <th class="border px-2 whitespace-nowrap">Tanggal Terbit</th>
+                                    <th class="border px-2 whitespace-nowrap">Aksi</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center text-gray-500 py-2">Belum ada data.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    <div class="mt-4">
-                        {{ $data->links() }}
+                            </thead>
+                            <tbody>
+                                @forelse ($data as $kk)
+                                    <tr>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->no_kk }}</td>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->kepala_keluarga }}</td>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->alamat }}</td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            {{ $kk->rt }}/{{ $kk->rw }}</td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            {{ getWilayahNama($kk->desa->kode ?? '', 'provinsi') }}
+                                        </td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            {{ getWilayahNama($kk->desa->kode ?? '', 'kabupaten') }}
+                                        </td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            {{ getWilayahNama($kk->desa->kode ?? '', 'kecamatan') }}
+                                        </td>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->desa->nama }}</td>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->kode_pos }}</td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td>
+                                        <td class="border px-2 whitespace-nowrap">
+                                            <a onclick="showEditModal(this)" data-id="{{ $kk->id }}"
+                                                data-no_kk="{{ $kk->no_kk }}"
+                                                data-kepala_keluarga="{{ $kk->kepala_keluarga }}"
+                                                data-alamat="{{ $kk->alamat }}" data-rt="{{ $kk->rt }}"
+                                                data-rw="{{ $kk->rw }}" data-desa_id="{{ $kk->desa_id }}"
+                                                data-kode_pos="{{ $kk->kode_pos }}"
+                                                data-tanggal_terbit="{{ $kk->tanggal_terbit }}"
+                                                class="text-blue-600 hover:underline cursor-pointer">
+                                                ✏️ Edit
+                                            </a>
+                                            <a onclick="confirmDelete({{ $kk->id }}, '{{ $kk->no_kk }}')"
+                                                class="text-red-600 hover:underline cursor-pointer">🗑️ Hapus</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center text-gray-500 py-2">Belum ada data.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        <div class="mt-4">
+                            {{ $data->links() }}
+                        </div>
                     </div>
 
                 </div>

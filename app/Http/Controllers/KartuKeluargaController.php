@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\KartuKeluarga;
 
 use Illuminate\Http\Request;
@@ -14,8 +15,8 @@ class KartuKeluargaController extends Controller
      */
     public function index()
     {
-    $data = KartuKeluarga::with('desa')->latest()->get();
-    return view('kartu_keluarga.index', compact('data'));
+        $data = KartuKeluarga::with('desa')->latest()->get();
+        return view('kartu_keluarga.index', compact('data'));
     }
 
     /**
@@ -25,7 +26,7 @@ class KartuKeluargaController extends Controller
      */
     public function create()
     {
-    return view('kartu_keluarga.create');
+        return view('kartu_keluarga.create');
     }
 
     /**
@@ -83,7 +84,20 @@ class KartuKeluargaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'no_kk' => 'required|unique:kartu_keluargas,no_kk,' . $id,
+            'kepala_keluarga' => 'required',
+            'alamat' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
+            'desa_id' => 'required|exists:wilayah,kode',
+            'kode_pos' => 'required',
+            'tanggal_terbit' => 'required|date',
+        ]);
+
+        KartuKeluarga::findOrFail($id)->update($validated);
+
+        return redirect()->route('kartu-keluarga.index')->with('success', 'Data berhasil diperbarui');
     }
 
     /**
@@ -94,6 +108,7 @@ class KartuKeluargaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        KartuKeluarga::findOrFail($id)->delete();
+        return redirect()->route('kartu-keluarga.index')->with('success', 'Data berhasil dihapus');
     }
 }

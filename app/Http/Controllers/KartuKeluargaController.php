@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class KartuKeluargaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->user()->role === 'bendahara') {
+                abort(403, 'Anda tidak punya akses ke modul ini.');
+            }
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -54,6 +64,9 @@ class KartuKeluargaController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->role === 'admin') {
+            abort(403, 'Admin tidak boleh mengubah data KK.');
+        }
         $validated = $request->validate([
             'no_kk' => 'required|digits_between:10,20|numeric|unique:kartu_keluargas,no_kk',
             'kepala_keluarga' => 'required|string',
@@ -102,6 +115,9 @@ class KartuKeluargaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->role === 'admin') {
+            abort(403, 'Admin tidak boleh mengubah data KK.');
+        }
         $validated = $request->validate([
             'no_kk' => 'required|digits_between:10,20|numeric|unique:kartu_keluargas,no_kk' . ($id ? ',' . $id : ''),
             'kepala_keluarga' => 'required|string',
@@ -126,6 +142,9 @@ class KartuKeluargaController extends Controller
      */
     public function destroy($id)
     {
+        if (auth()->user()->role === 'admin') {
+            abort(403, 'Admin tidak boleh mengubah data KK.');
+        }
         KartuKeluarga::findOrFail($id)->delete();
         return redirect()->route('kartu-keluarga.index')->with('success', 'Data berhasil dihapus');
     }

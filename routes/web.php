@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\KartuKeluargaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::get('/users', [UserController::class, 'index']);
+});
+
+Route::middleware(['auth', 'role:admin,sekretaris'])->group(function () {
+    Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create']);
 });
 
 });

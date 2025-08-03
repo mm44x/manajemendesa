@@ -33,7 +33,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin,sekretaris'])->group(function () {
-    Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create']);
+    // Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create']);
+    Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create', 'store']);
 });
 
 });

@@ -36,7 +36,21 @@ class KartuKeluargaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'no_kk' => 'required|unique:kartu_keluargas',
+            'kepala_keluarga' => 'required',
+            'alamat' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kabupaten' => 'required',
+            'kode_pos' => 'required',
+            'tanggal_terbit' => 'required|date',
+        ]);
+
+        KartuKeluarga::create($validated);
+        return redirect()->route('kartu-keluarga.index')->with('success', 'Data KK berhasil ditambahkan.');
     }
 
     /**

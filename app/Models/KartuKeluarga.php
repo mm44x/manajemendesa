@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class KartuKeluarga extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'no_kk',
+        'kepala_keluarga',
+        'alamat',
+        'rt',
+        'rw',
+        'desa',
+        'kecamatan',
+        'kabupaten',
+        'kode_pos',
+        'tanggal_terbit',
+    ];
 }

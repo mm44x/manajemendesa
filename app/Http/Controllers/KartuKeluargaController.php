@@ -13,9 +13,16 @@ class KartuKeluargaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = KartuKeluarga::with('desa')->latest()->get();
+        $query = KartuKeluarga::with('desa');
+
+        if ($request->has('cari')) {
+            $query->where('kepala_keluarga', 'like', '%' . $request->cari . '%');
+        }
+
+        $data = $query->paginate(10)->appends(request()->query()); // ✅ penting: withQueryString biar pagination tetap bawa query pencarian
+
         return view('kartu_keluarga.index', compact('data'));
     }
 

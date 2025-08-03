@@ -11,6 +11,20 @@
                 class="mb-3 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 + Tambah KK
             </button>
+            <form method="GET" class="mb-4 flex items-center gap-2">
+                <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari kepala keluarga..."
+                    class="px-3 py-2 border rounded w-64 bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                    🔍 Cari
+                </button>
+                @if (request('cari'))
+                    <a href="{{ route('kartu-keluarga.index') }}"
+                        class="text-sm text-red-600 hover:underline dark:text-red-400">Reset</a>
+                @endif
+            </form>
+
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 text-gray-900 ">
                     <table class="min-w-full border text-sm dark:bg-gray-900 dark:text-white">
@@ -67,6 +81,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $data->links() }}
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -122,7 +140,8 @@
                     </div>
                     <div>
                         <label class="block">Desa</label>
-                        <select name="desa_id" id="edit_desa" class="w-full border rounded px-3 py-2" required></select>
+                        <select name="desa_id" id="edit_desa" class="w-full border rounded px-3 py-2"
+                            required></select>
                     </div>
                     <div>
                         <label class="block">Kode Pos</label>
@@ -531,5 +550,21 @@
         </script>
     @endif
 
+    <style>
+        .pagination .page-link {
+            @apply text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-900;
+        }
 
+        .pagination .active .page-link {
+            @apply bg-blue-600 text-white border-blue-600;
+        }
+
+        .dark .pagination .page-link {
+            @apply text-white bg-gray-800 border-gray-700 hover:bg-gray-700 hover:text-white;
+        }
+
+        .dark .pagination .active .page-link {
+            @apply bg-blue-500 text-white border-blue-500;
+        }
+    </style>
 </x-app-layout>

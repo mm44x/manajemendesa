@@ -59,7 +59,16 @@
                                 <tr>
                                     <th class="px-3 py-2 whitespace-nowrap border">NIK</th>
                                     <th class="px-3 py-2 whitespace-nowrap border">Nama</th>
+                                    @if (auth()->user()->role == 'admin')
+                                        <th class="px-3 py-2 whitespace-nowrap border">Jenis Kelamin</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border">Tempat, Tgl Lahir</th>
+                                    @endif
                                     <th class="px-3 py-2 whitespace-nowrap border">Hubungan</th>
+                                    @if (auth()->user()->role == 'admin')
+                                        <th class="px-3 py-2 whitespace-nowrap border">Agama</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border">Pendidikan</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border">Pekerjaan</th>
+                                    @endif
                                     @if (auth()->user()->role !== 'admin')
                                         <th class="px-3 py-2 whitespace-nowrap border">Aksi</th>
                                     @endif
@@ -70,7 +79,20 @@
                                     <tr>
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nik }}</td>
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nama }}</td>
+                                        @if (auth()->user()->role == 'admin')
+                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->jenis_kelamin }}
+                                            </td>
+                                            <td class="border px-3 py-2 whitespace-nowrap">
+                                                {{ getWilayahNama($item->tempat_lahir, 'kabupaten') }},
+                                                {{ \Carbon\Carbon::parse($item->tanggal_lahir)->format('d-m-Y') }}
+                                            </td>
+                                        @endif
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->hubungan }}</td>
+                                        @if (auth()->user()->role == 'admin')
+                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->agama }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pendidikan }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pekerjaan }}</td>
+                                        @endif
                                         @if (auth()->user()->role !== 'admin')
                                             <td class="border px-3 py-2 whitespace-nowrap">
                                                 <button onclick="showEditModal(this)" data-id="{{ $item->id }}"

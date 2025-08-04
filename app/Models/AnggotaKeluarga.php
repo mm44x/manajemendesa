@@ -24,11 +24,5 @@ class AnggotaKeluarga extends Model
         'pendidikan',
         'pekerjaan',
     ];
-
-    public function tempatLahir()
-    {
-        // return $this->belongsTo(Wilayah::class, 'tempat_lahir', 'kode'); // kode wilayah kabupaten/kota
-    }
-
     use HasFactory;
 }

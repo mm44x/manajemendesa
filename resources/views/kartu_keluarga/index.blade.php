@@ -63,6 +63,16 @@
                                 <tr>
                                     <th class="border px-2 whitespace-nowrap">No KK</th>
                                     <th class="border px-2 whitespace-nowrap">Kepala Keluarga</th>
+                                    @if ($role == 'admin')
+                                        <th class="border px-2 whitespace-nowrap">Alamat</th>
+                                        <th class="border px-2 whitespace-nowrap">RT/RW</th>
+                                        <th class="border px-2 whitespace-nowrap">Provinsi</th>
+                                        <th class="border px-2 whitespace-nowrap">Kabupaten/Kota</th>
+                                        <th class="border px-2 whitespace-nowrap">Kecamatan</th>
+                                        <th class="border px-2 whitespace-nowrap">Desa</th>
+                                        <th class="border px-2 whitespace-nowrap">Kode Pos</th>
+                                        <th class="border px-2 whitespace-nowrap">Tanggal Terbit</th>
+                                    @endif
                                     @if ($role !== 'admin')
                                         <th class="border px-2 whitespace-nowrap">Aksi</th>
                                     @endif
@@ -76,6 +86,24 @@
                                                 class="text-indigo-600 hover:underline cursor-pointer"> - 👥 [Lihat
                                                 Anggota]</a></td>
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->kepala_keluarga }}</td>
+                                        @if ($role == 'admin')
+                                            <td class="border px-2 whitespace-nowrap">{{ $kk->alamat }}</td>
+                                            <td class="border px-2 whitespace-nowrap">
+                                                {{ $kk->rt }}/{{ $kk->rw }}</td>
+                                            <td class="border px-2 whitespace-nowrap">
+                                                {{ getWilayahNama($kk->desa->kode ?? '', 'provinsi') }}
+                                            </td>
+                                            <td class="border px-2 whitespace-nowrap">
+                                                {{ getWilayahNama($kk->desa->kode ?? '', 'kabupaten') }}
+                                            </td>
+                                            <td class="border px-2 whitespace-nowrap">
+                                                {{ getWilayahNama($kk->desa->kode ?? '', 'kecamatan') }}
+                                            </td>
+                                            <td class="border px-2 whitespace-nowrap">{{ $kk->desa->nama }}</td>
+                                            <td class="border px-2 whitespace-nowrap">{{ $kk->kode_pos }}</td>
+                                            <td class="border px-2 whitespace-nowrap">
+                                                {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td>
+                                        @endif
                                         @if ($role !== 'admin')
                                             <td class="border px-2 whitespace-nowrap">
                                                 <a onclick="showEditModal(this)" data-id="{{ $kk->id }}"
@@ -140,13 +168,13 @@
                         </div>
                         <div>
                             <label class="block">RT</label>
-                            <input type="text" name="rt" id="edit_rt" class="w-full border rounded px-3 py-2"
-                                required>
+                            <input type="text" name="rt" id="edit_rt"
+                                class="w-full border rounded px-3 py-2" required>
                         </div>
                         <div>
                             <label class="block">RW</label>
-                            <input type="text" name="rw" id="edit_rw" class="w-full border rounded px-3 py-2"
-                                required>
+                            <input type="text" name="rw" id="edit_rw"
+                                class="w-full border rounded px-3 py-2" required>
                         </div>
                         <div>
                             <label class="block">Provinsi</label>

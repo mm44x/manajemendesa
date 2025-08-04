@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\WargaController;
 
 
 /*
@@ -47,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/anggota-keluarga', [AnggotaKeluargaController::class, 'store'])->name('anggota-keluarga.store');
     Route::put('/anggota-keluarga/{id}', [AnggotaKeluargaController::class, 'update'])->name('anggota-keluarga.update');
     Route::delete('/anggota-keluarga/{id}', [AnggotaKeluargaController::class, 'destroy'])->name('anggota-keluarga.destroy');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/semua-warga', [WargaController::class, 'index'])->name('semua-warga.index');
+    });
 });
 
 require __DIR__ . '/auth.php';

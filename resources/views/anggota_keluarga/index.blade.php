@@ -51,9 +51,6 @@
                 </div>
 
             </div>
-
-
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 text-gray-900 ">
                     <div class="overflow-x-auto">
@@ -62,13 +59,10 @@
                                 <tr>
                                     <th class="px-3 py-2 whitespace-nowrap border">NIK</th>
                                     <th class="px-3 py-2 whitespace-nowrap border">Nama</th>
-                                    {{-- <th class="px-3 py-2 whitespace-nowrap border">Jenis Kelamin</th>
-                                    <th class="px-3 py-2 whitespace-nowrap border">Tempat, Tgl Lahir</th> --}}
                                     <th class="px-3 py-2 whitespace-nowrap border">Hubungan</th>
-                                    {{-- <th class="px-3 py-2 whitespace-nowrap border">Agama</th>
-                                    <th class="px-3 py-2 whitespace-nowrap border">Pendidikan</th>
-                                    <th class="px-3 py-2 whitespace-nowrap border">Pekerjaan</th> --}}
-                                    <th class="px-3 py-2 whitespace-nowrap border">Aksi</th>
+                                    @if (auth()->user()->role !== 'admin')
+                                        <th class="px-3 py-2 whitespace-nowrap border">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,17 +70,9 @@
                                     <tr>
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nik }}</td>
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nama }}</td>
-                                        {{-- <td class="border px-3 py-2 whitespace-nowrap">{{ $item->jenis_kelamin }}</td>
-                                        <td class="border px-3 py-2 whitespace-nowrap">
-                                            {{ getWilayahNama($item->tempat_lahir, 'kabupaten') }},
-                                            {{ \Carbon\Carbon::parse($item->tanggal_lahir)->format('d-m-Y') }}
-                                        </td> --}}
                                         <td class="border px-3 py-2 whitespace-nowrap">{{ $item->hubungan }}</td>
-                                        {{-- <td class="border px-3 py-2 whitespace-nowrap">{{ $item->agama }}</td>
-                                        <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pendidikan }}</td>
-                                        <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pekerjaan }}</td> --}}
-                                        <td class="border px-3 py-2 whitespace-nowrap">
-                                            @if (auth()->user()->role !== 'admin')
+                                        @if (auth()->user()->role !== 'admin')
+                                            <td class="border px-3 py-2 whitespace-nowrap">
                                                 <button onclick="showEditModal(this)" data-id="{{ $item->id }}"
                                                     data-nik="{{ $item->nik }}" data-nama="{{ $item->nama }}"
                                                     data-jenis_kelamin="{{ $item->jenis_kelamin }}"
@@ -104,9 +90,8 @@
                                                     class="text-red-600 hover:underline cursor-pointer ml-2">
                                                     🗑️ [Hapus]
                                                 </button>
-                                            @endif
-                                        </td>
-
+                                            </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>

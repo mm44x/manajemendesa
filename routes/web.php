@@ -6,6 +6,8 @@ use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\WargaController;
+use App\Http\Controllers\WargaExportController;
+
 
 
 /*
@@ -52,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/semua-warga', [WargaController::class, 'index'])->name('semua-warga.index');
     });
+    Route::get('/warga/export', [WargaExportController::class, 'export'])->name('warga.export');
 });
 
 require __DIR__ . '/auth.php';

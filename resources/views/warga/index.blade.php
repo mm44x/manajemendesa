@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
                 class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
-                <div class="p-4 flex flex-wrap items-center gap-2">
+                <div class="p-4 flex flex-wrap justify-between items-center gap-2">
                     <form method="GET" class="mb-1 flex flex-wrap items-center gap-2">
                         <input type="text" name="no_kk" value="{{ request('no_kk') }}" placeholder="Cari No KK"
                             class="px-4 py-2 rounded text-sm font-medium min-w-[12rem] border bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
@@ -32,7 +32,13 @@
                             </a>
                         @endif
                     </form>
+
+                    <a href="{{ route('warga.export') }}"
+                        class="px-4 py-2 rounded text-sm font-medium bg-green-600 text-white hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 whitespace-nowrap">
+                        📤 Export Excel
+                    </a>
                 </div>
+
             </div>
 
             <div

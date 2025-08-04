@@ -1,20 +1,23 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
             {{ __('Anggota Keluarga') }}
         </h2>
     </x-slot>
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
+            <div
+                class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
                 <div class="p-4">
                     <h3 class="text-lg font-bold">Kepala Keluarga: {{ $kk->kepala_keluarga }}</h3>
-                    <p class="text-sm text-gray-600">No KK: {{ $kk->no_kk }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">No KK: {{ $kk->no_kk }}</p>
                 </div>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
-                <div class="p-4 text-gray-900 flex flex-wrap items-center gap-2">
+
+            <div
+                class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
+                <div class="p-4 flex flex-wrap items-center gap-2">
                     <a href="{{ route('kartu-keluarga.index') }}"
                         class="px-4 py-2 rounded text-sm font-medium bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
                         ⬅️ Kembali ke Manajemen KK
@@ -27,8 +30,10 @@
                         </button>
                     @endif
                 </div>
-                <hr>
-                <div class="p-4 text-gray-900">
+
+                <hr class="border-gray-200 dark:border-gray-700">
+
+                <div class="p-4">
                     <form method="GET" class="mb-1 flex flex-wrap items-center gap-2">
                         <input type="text" name="nik" value="{{ request('nik') }}" placeholder="Cari NIK"
                             class="px-4 py-2 rounded text-sm font-medium border min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
@@ -49,52 +54,64 @@
                         @endif
                     </form>
                 </div>
-
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-4 text-gray-900 ">
+
+
+            <div
+                class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-4">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full border text-sm dark:bg-gray-900 dark:text-white">
-                            <thead class="bg-gray-200 text-left">
+                        <table class="min-w-full border text-sm">
+                            <thead class="bg-gray-200 dark:bg-gray-900 text-left dark:text-white">
                                 <tr>
-                                    <th class="px-3 py-2 whitespace-nowrap border">NIK</th>
-                                    <th class="px-3 py-2 whitespace-nowrap border">Nama</th>
+                                    <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">NIK</th>
+                                    <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Nama</th>
                                     @if (auth()->user()->role == 'admin')
-                                        <th class="px-3 py-2 whitespace-nowrap border">Jenis Kelamin</th>
-                                        <th class="px-3 py-2 whitespace-nowrap border">Tempat, Tgl Lahir</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Jenis
+                                            Kelamin</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Tempat, Tgl
+                                            Lahir</th>
                                     @endif
-                                    <th class="px-3 py-2 whitespace-nowrap border">Hubungan</th>
+                                    <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Hubungan</th>
                                     @if (auth()->user()->role == 'admin')
-                                        <th class="px-3 py-2 whitespace-nowrap border">Agama</th>
-                                        <th class="px-3 py-2 whitespace-nowrap border">Pendidikan</th>
-                                        <th class="px-3 py-2 whitespace-nowrap border">Pekerjaan</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Agama</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Pendidikan
+                                        </th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Pekerjaan
+                                        </th>
                                     @endif
                                     @if (auth()->user()->role !== 'admin')
-                                        <th class="px-3 py-2 whitespace-nowrap border">Aksi</th>
+                                        <th class="px-3 py-2 whitespace-nowrap border dark:border-gray-700">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($anggota as $item)
-                                    <tr>
-                                        <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nik }}</td>
-                                        <td class="border px-3 py-2 whitespace-nowrap">{{ $item->nama }}</td>
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                            {{ $item->nik }}</td>
+                                        <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                            {{ $item->nama }}</td>
                                         @if (auth()->user()->role == 'admin')
-                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->jenis_kelamin }}
-                                            </td>
-                                            <td class="border px-3 py-2 whitespace-nowrap">
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                                {{ $item->jenis_kelamin }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
                                                 {{ getWilayahNama($item->tempat_lahir, 'kabupaten') }},
                                                 {{ \Carbon\Carbon::parse($item->tanggal_lahir)->format('d-m-Y') }}
                                             </td>
                                         @endif
-                                        <td class="border px-3 py-2 whitespace-nowrap">{{ $item->hubungan }}</td>
+                                        <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                            {{ $item->hubungan }}</td>
                                         @if (auth()->user()->role == 'admin')
-                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->agama }}</td>
-                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pendidikan }}</td>
-                                            <td class="border px-3 py-2 whitespace-nowrap">{{ $item->pekerjaan }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                                {{ $item->agama }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                                {{ $item->pendidikan }}</td>
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
+                                                {{ $item->pekerjaan }}</td>
                                         @endif
                                         @if (auth()->user()->role !== 'admin')
-                                            <td class="border px-3 py-2 whitespace-nowrap">
+                                            <td class="border px-3 py-2 whitespace-nowrap dark:border-gray-700">
                                                 <button onclick="showEditModal(this)" data-id="{{ $item->id }}"
                                                     data-nik="{{ $item->nik }}" data-nama="{{ $item->nama }}"
                                                     data-jenis_kelamin="{{ $item->jenis_kelamin }}"
@@ -117,49 +134,56 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center py-3 text-gray-500">Belum ada anggota.
-                                        </td>
+                                        <td colspan="9" class="text-center py-3 text-gray-500 dark:text-gray-400">
+                                            Belum ada anggota.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+
                         <div class="mt-4">
                             {{ $anggota->links() }}
                         </div>
-
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 
     {{-- Modal Tambah Anggota --}}
     <div id="anggotaModal"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden overflow-auto px-4 py-8">
-        <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg w-full">
-            <div class="flex justify-between items-center border-b p-4">
-                <h3 class="text-lg font-semibold">Tambah Anggota Kartu Keluarga</h3>
+        <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-3xl shadow-lg">
+            <div class="flex justify-between items-center border-b p-4 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Tambah Anggota Kartu Keluarga</h3>
                 <button onclick="toggleAddModal(false)"
-                    class="text-gray-500 hover:text-red-600 text-xl">&times;</button>
+                    class="text-gray-500 hover:text-red-600 dark:hover:text-red-400 text-xl">&times;</button>
             </div>
+
             <form action="{{ route('anggota-keluarga.store') }}" method="POST"
-                class="p-4 max-h-[90vh] overflow-y-auto">
+                class="p-4 max-h-[90vh] overflow-y-auto text-gray-900 dark:text-white">
                 @csrf
                 <input type="hidden" name="kartu_keluarga_id" value="{{ $kk->id }}">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block">NIK</label>
-                        <input type="text" name="nik" class="w-full border rounded px-3 py-2" required>
+                        <input type="text" name="nik"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                     </div>
                     <div>
                         <label class="block">Nama</label>
-                        <input type="text" name="nama" class="w-full border rounded px-3 py-2" required>
+                        <input type="text" name="nama"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                     </div>
                     <div>
                         <label class="block">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="w-full border rounded px-3 py-2" required>
+                        <select name="jenis_kelamin"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                             <option value="">-- Pilih --</option>
                             <option value="Laki-laki">Laki-laki</option>
                             <option value="Perempuan">Perempuan</option>
@@ -169,14 +193,17 @@
                         <label class="block mb-1">Tempat Lahir</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm text-gray-700">Provinsi</label>
-                                <select id="provTL" class="w-full border rounded px-3 py-2" required>
+                                <label class="block text-sm">Provinsi</label>
+                                <select id="provTL"
+                                    class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                                    required>
                                     <option value="">-- Pilih Provinsi --</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-700">Kabupaten/Kota</label>
-                                <select name="tempat_lahir" id="kabTL" class="w-full border rounded px-3 py-2"
+                                <label class="block text-sm">Kabupaten/Kota</label>
+                                <select name="tempat_lahir" id="kabTL"
+                                    class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
                                     required>
                                     <option value="">-- Pilih Kabupaten/Kota --</option>
                                 </select>
@@ -186,11 +213,15 @@
 
                     <div>
                         <label class="block">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="w-full border rounded px-3 py-2" required>
+                        <input type="date" name="tanggal_lahir"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                     </div>
                     <div>
                         <label class="block">Hubungan</label>
-                        <select name="hubungan" class="w-full border rounded px-3 py-2" required>
+                        <select name="hubungan"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                             <option value="">-- Pilih --</option>
                             <option value="Istri">Istri</option>
                             <option value="Anak">Anak</option>
@@ -200,7 +231,9 @@
                     </div>
                     <div>
                         <label class="block">Agama</label>
-                        <select name="agama" class="w-full border rounded px-3 py-2" required>
+                        <select name="agama"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                             <option value="">-- Pilih --</option>
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
@@ -212,7 +245,8 @@
                     </div>
                     <div>
                         <label class="block">Pendidikan</label>
-                        <input list="list_pendidikan" name="pendidikan" class="w-full border rounded px-3 py-2">
+                        <input list="list_pendidikan" name="pendidikan"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600">
                         <datalist id="list_pendidikan">
                             <option value="SD">
                             <option value="SMP">
@@ -225,7 +259,8 @@
                     </div>
                     <div>
                         <label class="block">Pekerjaan</label>
-                        <input list="list_pekerjaan" name="pekerjaan" class="w-full border rounded px-3 py-2">
+                        <input list="list_pekerjaan" name="pekerjaan"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600">
                         <datalist id="list_pekerjaan">
                             <option value="Pelajar">
                             <option value="Mahasiswa">
@@ -239,9 +274,12 @@
 
                 <div class="flex justify-end mt-4 gap-2">
                     <button type="button" onclick="toggleAddModal(false)"
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Batal</button>
-                    <button type="submit"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        Batal
+                    </button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Simpan
+                    </button>
                 </div>
             </form>
         </div>
@@ -250,14 +288,15 @@
     {{-- Modal Edit Anggota --}}
     <div id="anggotaEditModal"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden overflow-auto px-4 py-8">
-        <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg w-full">
-            <div class="flex justify-between items-center border-b p-4">
-                <h3 class="text-lg font-semibold">Edit Anggota Keluarga</h3>
+        <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-3xl shadow-lg">
+            <div class="flex justify-between items-center border-b p-4 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Anggota Keluarga</h3>
                 <button onclick="toggleEditModal(false)"
-                    class="text-gray-500 hover:text-red-600 text-xl">&times;</button>
+                    class="text-gray-500 hover:text-red-600 dark:hover:text-red-400 text-xl">&times;</button>
             </div>
 
-            <form id="editAnggotaForm" method="POST" class="p-4 max-h-[90vh] overflow-y-auto">
+            <form id="editAnggotaForm" method="POST"
+                class="p-4 max-h-[90vh] overflow-y-auto text-gray-900 dark:text-white">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="kartu_keluarga_id" value="{{ $kk->id }}">
@@ -265,17 +304,20 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block">NIK</label>
-                        <input type="text" name="nik" id="edit_nik" class="w-full border rounded px-3 py-2"
+                        <input type="text" name="nik" id="edit_nik"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             required>
                     </div>
                     <div>
                         <label class="block">Nama</label>
-                        <input type="text" name="nama" id="edit_nama" class="w-full border rounded px-3 py-2"
+                        <input type="text" name="nama" id="edit_nama"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             required>
                     </div>
                     <div>
                         <label class="block">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" id="edit_jenis_kelamin" class="w-full border rounded px-3 py-2"
+                        <select name="jenis_kelamin" id="edit_jenis_kelamin"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             required>
                             <option value="">-- Pilih --</option>
                             <option value="Laki-laki">Laki-laki</option>
@@ -287,11 +329,14 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-sm">Provinsi</label>
-                                <select id="edit_provTL" class="w-full border rounded px-3 py-2" required></select>
+                                <select id="edit_provTL"
+                                    class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                                    required></select>
                             </div>
                             <div>
                                 <label class="text-sm">Kabupaten/Kota</label>
-                                <select name="tempat_lahir" id="edit_kabTL" class="w-full border rounded px-3 py-2"
+                                <select name="tempat_lahir" id="edit_kabTL"
+                                    class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
                                     required></select>
                             </div>
                         </div>
@@ -299,11 +344,14 @@
                     <div>
                         <label class="block">Tanggal Lahir</label>
                         <input type="date" name="tanggal_lahir" id="edit_tanggal_lahir"
-                            class="w-full border rounded px-3 py-2" required>
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                     </div>
                     <div>
                         <label class="block">Hubungan</label>
-                        <select name="hubungan" id="edit_hubungan" class="w-full border rounded px-3 py-2" required>
+                        <select name="hubungan" id="edit_hubungan"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                             <option value="">-- Pilih --</option>
                             <option value="Istri">Istri</option>
                             <option value="Anak">Anak</option>
@@ -314,7 +362,9 @@
                     </div>
                     <div>
                         <label class="block">Agama</label>
-                        <select name="agama" id="edit_agama" class="w-full border rounded px-3 py-2" required>
+                        <select name="agama" id="edit_agama"
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            required>
                             <option value="">-- Pilih --</option>
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
@@ -327,45 +377,54 @@
                     <div>
                         <label class="block">Pendidikan</label>
                         <input list="list_pendidikan" name="pendidikan" id="edit_pendidikan"
-                            class="w-full border rounded px-3 py-2">
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600">
                     </div>
                     <div>
                         <label class="block">Pekerjaan</label>
                         <input list="list_pekerjaan" name="pekerjaan" id="edit_pekerjaan"
-                            class="w-full border rounded px-3 py-2">
+                            class="w-full border rounded px-3 py-2 bg-white text-black dark:bg-gray-700 dark:text-white dark:border-gray-600">
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-4 gap-2">
                     <button type="button" onclick="toggleEditModal(false)"
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Batal</button>
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan
-                        Perubahan</button>
+                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        Batal
+                    </button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Simpan Perubahan
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
+
     {{-- Modal Hapus Anggota --}}
     <div id="anggotaDeleteModal"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden px-4 py-8">
-        <div class="bg-white rounded-lg w-full max-w-md shadow-lg p-6">
-            <div class="text-lg font-semibold mb-4">Konfirmasi Hapus</div>
-            <p class="mb-4 text-sm text-gray-700">
-                Yakin ingin menghapus anggota keluarga <span id="hapusNama" class="font-bold text-red-600"></span>?
+        <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md shadow-lg p-6">
+            <div class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Konfirmasi Hapus</div>
+            <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">
+                Yakin ingin menghapus anggota keluarga
+                <span id="hapusNama" class="font-bold text-red-600 dark:text-red-400"></span>?
             </p>
             <form id="deleteAnggotaForm" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">
                     <button type="button" onclick="toggleDeleteModal(false)"
-                        class="px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600">Batal</button>
-                    <button type="submit"
-                        class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">Hapus</button>
+                        class="px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+                        Hapus
+                    </button>
                 </div>
             </form>
         </div>
     </div>
+
 
     {{-- Start Script Modal Tambah Anggota --}}
     <script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KartuKeluarga;
+use App\Models\AnggotaKeluarga;
 
 use Illuminate\Http\Request;
 
@@ -79,7 +80,20 @@ class KartuKeluargaController extends Controller
         ]);
 
 
-        KartuKeluarga::create($validated);
+        $kk = KartuKeluarga::create($validated);
+
+        AnggotaKeluarga::create([
+            'kartu_keluarga_id' => $kk->id,
+            'nik' => null,
+            'nama' => $kk->kepala_keluarga,
+            'jenis_kelamin' => null,
+            'tempat_lahir' => null,
+            'tanggal_lahir' => null,
+            'hubungan' => 'Kepala Keluarga',
+            'agama' => null,
+            'pendidikan' => null,
+            'pekerjaan' => null,
+        ]);
 
         return redirect()->route('kartu-keluarga.index')->with('success', 'Data KK berhasil ditambahkan.');
     }

@@ -23,4 +23,8 @@ class KartuKeluarga extends Model
         'tanggal_terbit',
     ];
 
+    public function anggota()
+    {
+        return $this->hasMany(AnggotaKeluarga::class);
+    }
 }

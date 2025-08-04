@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KartuKeluargaController;
+use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\WilayahController;
 
 
@@ -34,15 +35,15 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware(['auth', 'role:admin,sekretaris'])->group(function () {
-        // Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create']);
-        Route::resource('kartu-keluarga', KartuKeluargaController::class)->only(['index', 'create', 'store']);
+        Route::resource('kartu-keluarga', KartuKeluargaController::class);
     });
 
     Route::get('/wilayah/provinsi', [WilayahController::class, 'getProvinsi']);
     Route::get('/wilayah/kabupaten', [WilayahController::class, 'getKabupaten']);
     Route::get('/wilayah/kecamatan', [WilayahController::class, 'getKecamatan']);
     Route::get('/wilayah/desa', [WilayahController::class, 'getDesa']);
-    Route::resource('kartu-keluarga', KartuKeluargaController::class);
+
+    Route::get('/kartu-keluarga/{id}/anggota', [AnggotaKeluargaController::class, 'indexByKK'])->name('anggota-keluarga.index');
 });
 
 require __DIR__ . '/auth.php';

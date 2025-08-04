@@ -7,23 +7,23 @@
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-2">
                 @php $role = auth()->user()->role; @endphp
 
                 @if ($role !== 'admin')
-                    <div class="p-4 text-gray-900">
+                    <div class="p-4 text-gray-900 dark:text-white">
                         <button onclick="toggleModal(true)"
                             class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
                             + Tambah KK
                         </button>
                     </div>
-                    <hr>
+                    <hr class="border-gray-300 dark:border-gray-700">
                 @endif
 
-                <div class="p-4 text-gray-900">
+                <div class="p-4 text-gray-900 dark:text-white">
                     <form method="GET" class="mb-1 flex flex-wrap items-center gap-2">
                         <select name="sort_no_kk"
-                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-600">
                             <option value="">Urutkan</option>
                             <option value="asc" {{ request('sort_no_kk') === 'asc' ? 'selected' : '' }}>No KK ASC
                             </option>
@@ -32,11 +32,11 @@
                         </select>
 
                         <input type="text" name="no_kk" value="{{ request('no_kk') }}" placeholder="Cari No KK"
-                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-600" />
 
                         <input type="text" name="cari" value="{{ request('cari') }}"
                             placeholder="Cari Kepala Keluarga"
-                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-600" />
 
                         <button type="submit"
                             class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
@@ -51,8 +51,8 @@
                         @endif
                     </form>
                 </div>
-
             </div>
+
 
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

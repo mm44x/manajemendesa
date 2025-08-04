@@ -11,40 +11,47 @@
                 @php $role = auth()->user()->role; @endphp
 
                 @if ($role !== 'admin')
-                    <div class="p-4 text-gray-900 ">
-                        <button clas onclick="toggleModal(true)"
-                            class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    <div class="p-4 text-gray-900">
+                        <button onclick="toggleModal(true)"
+                            class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
                             + Tambah KK
                         </button>
                     </div>
+                    <hr>
                 @endif
 
-                <div class="p-4 text-gray-900 ">
+                <div class="p-4 text-gray-900">
                     <form method="GET" class="mb-1 flex flex-wrap items-center gap-2">
                         <select name="sort_no_kk"
-                            class="px-3 py-2 border rounded min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600">
                             <option value="">Urutkan</option>
                             <option value="asc" {{ request('sort_no_kk') === 'asc' ? 'selected' : '' }}>No KK ASC
                             </option>
                             <option value="desc" {{ request('sort_no_kk') === 'desc' ? 'selected' : '' }}>No KK DESC
                             </option>
                         </select>
+
                         <input type="text" name="no_kk" value="{{ request('no_kk') }}" placeholder="Cari No KK"
-                            class="px-3 py-2 border rounded bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+
                         <input type="text" name="cari" value="{{ request('cari') }}"
                             placeholder="Cari Kepala Keluarga"
-                            class="px-3 py-2 border rounded bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                            class="px-4 py-2 border rounded text-sm font-medium min-w-[12rem] bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+
                         <button type="submit"
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                            class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
                             🔍 Filter
                         </button>
 
                         @if (request()->hasAny(['cari', 'no_kk', 'sort_no_kk']))
                             <a href="{{ route('kartu-keluarga.index') }}"
-                                class="text-sm text-red-600 hover:underline dark:text-red-400">Reset</a>
+                                class="px-4 py-2 rounded text-sm font-medium bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
+                                🔁 Reset
+                            </a>
                         @endif
                     </form>
                 </div>
+
             </div>
 
 
@@ -56,14 +63,6 @@
                                 <tr>
                                     <th class="border px-2 whitespace-nowrap">No KK</th>
                                     <th class="border px-2 whitespace-nowrap">Kepala Keluarga</th>
-                                    {{-- <th class="border px-2 whitespace-nowrap">Alamat</th>
-                                    <th class="border px-2 whitespace-nowrap">RT/RW</th>
-                                    <th class="border px-2 whitespace-nowrap">Provinsi</th>
-                                    <th class="border px-2 whitespace-nowrap">Kabupaten/Kota</th>
-                                    <th class="border px-2 whitespace-nowrap">Kecamatan</th>
-                                    <th class="border px-2 whitespace-nowrap">Desa</th>
-                                    <th class="border px-2 whitespace-nowrap">Kode Pos</th>
-                                    <th class="border px-2 whitespace-nowrap">Tanggal Terbit</th> --}}
                                     @if ($role !== 'admin')
                                         <th class="border px-2 whitespace-nowrap">Aksi</th>
                                     @endif
@@ -72,24 +71,11 @@
                             <tbody>
                                 @forelse ($data as $kk)
                                     <tr>
-                                        <td class="border px-2 whitespace-nowrap">{{ $kk->no_kk }}</td>
+                                        <td class="border px-2 whitespace-nowrap">{{ $kk->no_kk }} <a
+                                                href="{{ route('anggota-keluarga.index', $kk->id) }}"
+                                                class="text-indigo-600 hover:underline cursor-pointer"> - 👥 [Lihat
+                                                Anggota]</a></td>
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->kepala_keluarga }}</td>
-                                        {{-- <td class="border px-2 whitespace-nowrap">{{ $kk->alamat }}</td>
-                                        <td class="border px-2 whitespace-nowrap">
-                                            {{ $kk->rt }}/{{ $kk->rw }}</td>
-                                        <td class="border px-2 whitespace-nowrap">
-                                            {{ getWilayahNama($kk->desa->kode ?? '', 'provinsi') }}
-                                        </td>
-                                        <td class="border px-2 whitespace-nowrap">
-                                            {{ getWilayahNama($kk->desa->kode ?? '', 'kabupaten') }}
-                                        </td>
-                                        <td class="border px-2 whitespace-nowrap">
-                                            {{ getWilayahNama($kk->desa->kode ?? '', 'kecamatan') }}
-                                        </td>
-                                        <td class="border px-2 whitespace-nowrap">{{ $kk->desa->nama }}</td>
-                                        <td class="border px-2 whitespace-nowrap">{{ $kk->kode_pos }}</td>
-                                        <td class="border px-2 whitespace-nowrap">
-                                            {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td> --}}
                                         @if ($role !== 'admin')
                                             <td class="border px-2 whitespace-nowrap">
                                                 <a onclick="showEditModal(this)" data-id="{{ $kk->id }}"
@@ -102,9 +88,6 @@
                                                     class="text-blue-600 hover:underline cursor-pointer">
                                                     ✏️ [Lihat/Edit]
                                                 </a>
-                                                <a href="{{ route('anggota-keluarga.index', $kk->id) }}"
-                                                    class="text-indigo-600 hover:underline cursor-pointer">👥 [Lihat
-                                                    Anggota]</a>
                                                 <a onclick="confirmDelete({{ $kk->id }}, '{{ $kk->no_kk }}')"
                                                     class="text-red-600 hover:underline cursor-pointer">🗑️ [Hapus]</a>
                                             </td>

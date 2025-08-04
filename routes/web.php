@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/wilayah/desa', [WilayahController::class, 'getDesa']);
 
     Route::get('/kartu-keluarga/{id}/anggota', [AnggotaKeluargaController::class, 'indexByKK'])->name('anggota-keluarga.index');
+    Route::post('/anggota-keluarga', [AnggotaKeluargaController::class, 'store'])->name('anggota-keluarga.store');
+    Route::put('/anggota-keluarga/{id}', [AnggotaKeluargaController::class, 'update'])->name('anggota-keluarga.update');
+    Route::delete('/anggota-keluarga/{id}', [AnggotaKeluargaController::class, 'destroy'])->name('anggota-keluarga.destroy');
 });
 
 require __DIR__ . '/auth.php';

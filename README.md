@@ -1,66 +1,138 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+---
+# 🏘️ Aplikasi Manajemen Warga Desa
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sebuah aplikasi berbasis Laravel + Bootstrap untuk membantu pengelolaan data Kartu Keluarga (KK), Anggota Keluarga, dan seluruh data warga desa secara modern dan efisien.
+---
 
-## About Laravel
+## 📌 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Manajemen Kartu Keluarga (CRUD)
+-   Manajemen Anggota Keluarga (CRUD)
+-   Dropdown wilayah bertingkat berbasis AJAX (Provinsi → Kota/Kabupaten → Kecamatan → Desa)
+-   Modal dinamis untuk tambah/edit anggota
+-   Tampilan adaptif dark/light mode
+-   Hak akses berdasarkan role (`admin`, `sekretaris`, `bendahara`)
+-   Halaman "Data Semua Warga" untuk akses publik semua role
+-   Pencarian, filter, dan pagination
+-   Export ke Excel
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🧑‍💻 Teknologi yang Digunakan
 
-## Learning Laravel
+| Teknologi      | Versi / Info               |
+| -------------- | -------------------------- |
+| Laravel        | 10.x                       |
+| PHP            | 8.0.30 (XAMPP v3.3.0)      |
+| Bootstrap      | via Laravel Breeze + Blade |
+| Tailwind CSS   | via Laravel Breeze         |
+| Laravel Breeze | stack: `blade`             |
+| Database       | MySQL via XAMPP            |
+| JavaScript     | Vanilla JS + AJAX          |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Instalasi Lokal
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Clone repo:
 
-## Laravel Sponsors
+    ```bash
+    git clone https://github.com/mm44x/manajemendesa.git
+    cd manajemendesa
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+2. Install dependensi:
 
-### Premium Partners
+    ```bash
+    composer install
+    npm install && npm run build
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+3. Salin `.env` dan atur database:
 
-## Contributing
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Buat database dan jalankan migrasi:
 
-## Code of Conduct
+    ```bash
+    php artisan migrate --seed
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. Jalankan server:
 
-## Security Vulnerabilities
+    ```bash
+    php artisan serve
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. Login awal:
 
-## License
+    - Email: `admin@example.com`
+    - Password: `password`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🧭 Panduan Pengguna
+
+### 👤 Role & Akses
+
+| Role       | Akses Fitur                                 |
+| ---------- | ------------------------------------------- |
+| Admin      | Semua fitur (KK, Anggota, Semua Warga)      |
+| Sekretaris | CRUD KK, CRUD Anggota                       |
+| Bendahara  | Hanya bisa lihat data di "Data Semua Warga" |
+
+### 📂 Manajemen KK
+
+-   Tambah KK melalui tombol “+ Tambah KK”
+-   Gunakan dropdown wilayah bertingkat untuk memilih desa
+-   Simpan data, lalu tambah anggota
+
+### 👨‍👩‍👧‍👦 Manajemen Anggota Keluarga
+
+-   Klik “+ Tambah Anggota” pada detail KK
+-   Pilih tempat lahir menggunakan dropdown wilayah
+-   Edit atau hapus anggota lewat tombol aksi
+-   Role `admin` dapat melihat semua data detail
+
+### 👁️ Data Semua Warga
+
+-   Diakses dari sidebar oleh semua role
+-   Fitur:
+
+    -   Tabel grup berdasarkan KK
+    -   Kolom: No KK, NIK, Nama
+    -   Pencarian (NIK, Nama, No KK)
+    -   Export ke Excel
+    -   Tombol lihat detail warga
+
+---
+
+## 📝 To-Do List & Saran Pengembangan
+
+### 📋 To-Do List (Tahap Lanjut)
+
+-   [ ] Sistem verifikasi email pengguna baru
+-   [ ] Import KK + Anggota via Excel
+-   [ ] Manajemen mutasi penduduk (pindah/mati)
+-   [ ] Role tambahan: RW/RT untuk filter warga
+-   [ ] Cetak KK (PDF)
+-   [ ] Sistem notifikasi (misal: ulang tahun, peringatan data)
+-   [ ] Audit log (riwayat perubahan data)
+
+### 💡 Saran Lain
+
+-   Penambahan dashboard statistik (grafik total warga, jenis kelamin, agama, dll)
+-   Integrasi dengan API Dukcapil lokal (jika tersedia)
+-   Fitur backup data otomatis (Excel + SQL)
+-   Modul surat pengantar berbasis warga
+
+---
+
+## 🖼️ Screenshots
+
+_(Later)_
+
+---

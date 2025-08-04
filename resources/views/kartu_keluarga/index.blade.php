@@ -56,14 +56,14 @@
                                 <tr>
                                     <th class="border px-2 whitespace-nowrap">No KK</th>
                                     <th class="border px-2 whitespace-nowrap">Kepala Keluarga</th>
-                                    <th class="border px-2 whitespace-nowrap">Alamat</th>
+                                    {{-- <th class="border px-2 whitespace-nowrap">Alamat</th>
                                     <th class="border px-2 whitespace-nowrap">RT/RW</th>
                                     <th class="border px-2 whitespace-nowrap">Provinsi</th>
                                     <th class="border px-2 whitespace-nowrap">Kabupaten/Kota</th>
                                     <th class="border px-2 whitespace-nowrap">Kecamatan</th>
                                     <th class="border px-2 whitespace-nowrap">Desa</th>
                                     <th class="border px-2 whitespace-nowrap">Kode Pos</th>
-                                    <th class="border px-2 whitespace-nowrap">Tanggal Terbit</th>
+                                    <th class="border px-2 whitespace-nowrap">Tanggal Terbit</th> --}}
                                     @if ($role !== 'admin')
                                         <th class="border px-2 whitespace-nowrap">Aksi</th>
                                     @endif
@@ -74,7 +74,7 @@
                                     <tr>
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->no_kk }}</td>
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->kepala_keluarga }}</td>
-                                        <td class="border px-2 whitespace-nowrap">{{ $kk->alamat }}</td>
+                                        {{-- <td class="border px-2 whitespace-nowrap">{{ $kk->alamat }}</td>
                                         <td class="border px-2 whitespace-nowrap">
                                             {{ $kk->rt }}/{{ $kk->rw }}</td>
                                         <td class="border px-2 whitespace-nowrap">
@@ -89,7 +89,7 @@
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->desa->nama }}</td>
                                         <td class="border px-2 whitespace-nowrap">{{ $kk->kode_pos }}</td>
                                         <td class="border px-2 whitespace-nowrap">
-                                            {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td>
+                                            {{ \Carbon\Carbon::parse($kk->tanggal_terbit)->format('d-m-Y') }}</td> --}}
                                         @if ($role !== 'admin')
                                             <td class="border px-2 whitespace-nowrap">
                                                 <a onclick="showEditModal(this)" data-id="{{ $kk->id }}"
@@ -100,10 +100,13 @@
                                                     data-kode_pos="{{ $kk->kode_pos }}"
                                                     data-tanggal_terbit="{{ $kk->tanggal_terbit }}"
                                                     class="text-blue-600 hover:underline cursor-pointer">
-                                                    ✏️ Edit
+                                                    ✏️ [Lihat/Edit]
                                                 </a>
+                                                <a href="{{ route('anggota-keluarga.index', $kk->id) }}"
+                                                    class="text-indigo-600 hover:underline cursor-pointer">👥 [Lihat
+                                                    Anggota]</a>
                                                 <a onclick="confirmDelete({{ $kk->id }}, '{{ $kk->no_kk }}')"
-                                                    class="text-red-600 hover:underline cursor-pointer">🗑️ Hapus</a>
+                                                    class="text-red-600 hover:underline cursor-pointer">🗑️ [Hapus]</a>
                                             </td>
                                         @endif
                                     </tr>
@@ -125,17 +128,19 @@
     </div>
     @if ($role !== 'admin')
         {{-- Modal Edit KK --}}
-        <div id="kkEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg">
+        <div id="kkEditModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto px-4 py-8 hidden">
+            <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg w-full">
+
                 <div class="flex justify-between items-center border-b p-4">
                     <h3 class="text-lg font-semibold">Edit Kartu Keluarga</h3>
                     <button onclick="toggleEditModal(false)"
                         class="text-gray-500 hover:text-red-600 text-xl">&times;</button>
                 </div>
-                <form id="editKKForm" method="POST" class="p-4">
+                <form id="editKKForm" method="POST" class="p-4 max-h-[90vh] overflow-y-auto">
                     @csrf
                     @method('PUT')
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block">No KK</label>
                             <input type="text" name="no_kk" id="edit_no_kk" class="w-full border rounded px-3 py-2"
@@ -152,13 +157,13 @@
                         </div>
                         <div>
                             <label class="block">RT</label>
-                            <input type="text" name="rt" id="edit_rt"
-                                class="w-full border rounded px-3 py-2" required>
+                            <input type="text" name="rt" id="edit_rt" class="w-full border rounded px-3 py-2"
+                                required>
                         </div>
                         <div>
                             <label class="block">RW</label>
-                            <input type="text" name="rw" id="edit_rw"
-                                class="w-full border rounded px-3 py-2" required>
+                            <input type="text" name="rw" id="edit_rw" class="w-full border rounded px-3 py-2"
+                                required>
                         </div>
                         <div>
                             <label class="block">Provinsi</label>
@@ -201,7 +206,7 @@
 
         {{-- Modal Hapus KK --}}
         <div id="deleteModal"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto px-4 py-8 hidden">
             <div class="bg-white rounded-lg w-full max-w-md shadow-lg p-6">
                 <h3 class="text-lg font-semibold mb-4">
                     Konfirmasi Hapus (<span id="deleteNoKK" class="text-red-600 font-bold"></span>)
@@ -220,14 +225,16 @@
             </div>
         </div>
         {{-- Modal Tambah KK --}}
-        <div id="kkModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg">
+        <div id="kkModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto px-4 py-8 hidden">
+            <div class="bg-white rounded-lg w-full max-w-3xl shadow-lg w-full">
                 <div class="flex justify-between items-center border-b p-4">
                     <h3 class="text-lg font-semibold">Tambah Kartu Keluarga</h3>
                     <button onclick="toggleModal(false)"
                         class="text-gray-500 hover:text-red-600 text-xl">&times;</button>
                 </div>
-                <form action="{{ route('kartu-keluarga.store') }}" method="POST" class="p-4">
+                <form action="{{ route('kartu-keluarga.store') }}" method="POST"
+                    class="p-4 max-h-[90vh] overflow-y-auto">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>

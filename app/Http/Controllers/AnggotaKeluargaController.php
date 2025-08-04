@@ -10,8 +10,11 @@ class AnggotaKeluargaController extends Controller
 {
     public function indexByKK($id)
     {
-        $kk = \App\Models\KartuKeluarga::with('anggota')->findOrFail($id);
-        return view('anggota_keluarga.index', compact('kk'));
+        $kk = KartuKeluarga::findOrFail($id);
+
+        $anggota = $kk->anggota()->get(); // relasi anggota keluarga
+
+        return view('anggota_keluarga.index', compact('kk', 'anggota'));
     }
 
     /**

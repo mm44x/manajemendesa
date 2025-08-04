@@ -21,6 +21,10 @@
                             {{ __('Manajemen KK') }}
                         </x-nav-link>
                     @endif
+                    <x-nav-link :href="route('semua-warga.index')" :active="request()->routeIs('semua-warga.*')">
+                        {{ __('Data Semua Warga') }}
+                    </x-nav-link>
+
                 </div>
             </div>
 

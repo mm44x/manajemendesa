@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class AnggotaKeluargaController extends Controller
 {
+
     public function indexByKK($kk_id, Request $request)
     {
         $kk = KartuKeluarga::findOrFail($kk_id);

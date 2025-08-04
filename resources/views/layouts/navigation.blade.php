@@ -19,10 +19,11 @@
                     </x-nav-link>
 
                     @if ($role !== 'bendahara')
-                        <x-nav-link :href="route('kartu-keluarga.index')" :active="request()->routeIs('kartu-keluarga.*')">
+                        <x-nav-link :href="route('kartu-keluarga.index')" :active="request()->routeIs('kartu-keluarga.*') || request()->routeIs('anggota-keluarga.*')">
                             {{ __('Manajemen KK') }}
                         </x-nav-link>
                     @endif
+
                 </div>
             </div>
 

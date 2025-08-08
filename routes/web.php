@@ -6,6 +6,7 @@ use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\WargaController;
+use App\Http\Controllers\IuranController;
 use App\Http\Controllers\WargaExportController;
 
 Route::get('/', function () {
@@ -51,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin,sekretaris'])->group(function () {
         Route::get('/warga/export', [WargaExportController::class, 'export'])->name('warga.export');
     });
+
+    Route::resource('iuran', IuranController::class)->middleware('auth');
 });
 
 require __DIR__ . '/auth.php';

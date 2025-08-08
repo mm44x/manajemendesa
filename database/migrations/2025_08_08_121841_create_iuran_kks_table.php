@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kartu_keluargas', function (Blueprint $table) {
+        Schema::create('iuran_kks', function (Blueprint $table) {
             $table->id();
-            $table->string('no_kk')->unique();
-            $table->string('kepala_keluarga');
-            $table->text('alamat');
-            $table->string('rt', 3);
-            $table->string('rw', 3);
-            $table->string('kode_pos', 6);
-            $table->date('tanggal_terbit');
+            $table->foreignId('iuran_id')->constrained('iurans')->onDelete('cascade');
+            $table->foreignId('kartu_keluarga_id')->constrained('kartu_keluargas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -34,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kartu_keluargas');
+        Schema::dropIfExists('iuran_kks');
     }
 };

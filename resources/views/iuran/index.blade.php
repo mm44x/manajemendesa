@@ -69,6 +69,8 @@
                                             {{ $iuran->nominal ? 'Rp ' . number_format($iuran->nominal, 0, ',', '.') : '-' }}
                                         </td>
                                         <td class="border px-2 py-2 whitespace-nowrap space-x-2">
+                                            <a href="{{ route('iuran.setoran.input', $iuran->id) }}"
+                                                class="text-green-600 hover:underline">💲 [Setor]</a>
                                             <a onclick="showEditModal(this)" data-id="{{ $iuran->id }}"
                                                 data-nama_iuran="{{ $iuran->nama_iuran }}"
                                                 data-deskripsi="{{ $iuran->deskripsi }}"
@@ -410,6 +412,4 @@
             @apply bg-blue-500 text-white border-blue-500;
         }
     </style>
-
-
 </x-app-layout>

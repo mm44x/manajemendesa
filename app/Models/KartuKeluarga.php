@@ -27,4 +27,9 @@ class KartuKeluarga extends Model
     {
         return $this->hasMany(AnggotaKeluarga::class);
     }
+
+    public function setoranIurans()
+    {
+        return $this->hasMany(\App\Models\SetoranIuran::class, 'kartu_keluarga_id');
+    }
 }

@@ -54,6 +54,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('iuran', IuranController::class)->middleware('auth');
+
+    Route::get('iuran/{iuran}/setoran', [IuranController::class, 'inputSetoran'])->name('iuran.setoran.input');
+    Route::post('iuran/{iuran}/setoran', [IuranController::class, 'storeSetoran'])->name('iuran.setoran.store');
 });
 
 require __DIR__ . '/auth.php';

@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(UserSeeder::class);
         $this->call(KartuKeluargaSeeder::class);
+        $this->call(DemoWargaSeeder::class);
     }
 }

@@ -159,13 +159,20 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block mb-1">Peserta (KK)</label>
-                        <select name="peserta[]" multiple
+                        <div class="flex items-center gap-2 mb-1">
+                            <button type="button"
+                                class="text-xs px-3 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200"
+                                onclick="toggleSelectAllKK(this, 'peserta')">Pilih Semua</button>
+                            <button type="button"
+                                class="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                                onclick="toggleSelectAllKK(this, 'peserta', false)">Batal Pilih Semua</button>
+                        </div>
+                        <select name="peserta[]" id="peserta" multiple
                             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             required>
                             @foreach ($kks as $kk)
                                 <option value="{{ $kk->id }}">{{ $kk->kepala_keluarga }} (No.
-                                    {{ $kk->no_kk }})
-                                </option>
+                                    {{ $kk->no_kk }})</option>
                             @endforeach
                         </select>
                     </div>
@@ -238,13 +245,20 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block mb-1">Peserta (KK)</label>
+                        <div class="flex items-center gap-2 mb-1">
+                            <button type="button"
+                                class="text-xs px-3 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200"
+                                onclick="toggleSelectAllKK(this, 'edit_peserta')">Pilih Semua</button>
+                            <button type="button"
+                                class="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                                onclick="toggleSelectAllKK(this, 'edit_peserta', false)">Batal Pilih Semua</button>
+                        </div>
                         <select name="peserta[]" id="edit_peserta" multiple
                             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             required>
                             @foreach ($kks as $kk)
                                 <option value="{{ $kk->id }}">{{ $kk->kepala_keluarga }} (No.
-                                    {{ $kk->no_kk }})
-                                </option>
+                                    {{ $kk->no_kk }})</option>
                             @endforeach
                         </select>
                     </div>
@@ -317,8 +331,12 @@
 
             const peserta = JSON.parse(el.dataset.peserta);
             const selectPeserta = document.getElementById('edit_peserta');
-            for (let option of selectPeserta.options) {
-                option.selected = peserta.includes(parseInt(option.value));
+            if (selectPeserta) {
+                for (let option of selectPeserta.options) {
+                    option.selected = peserta.includes(parseInt(option.value));
+                }
+            } else {
+                console.error('Edit Peserta select not found!');
             }
 
             toggleEditModal(true);
@@ -412,4 +430,21 @@
             @apply bg-blue-500 text-white border-blue-500;
         }
     </style>
+
+    <script>
+        function toggleSelectAllKK(btn, selectId, selectAll = true) {
+            const select = document.getElementById(selectId);
+            if (!select) {
+                console.error('Select not found!', selectId);
+                return;
+            }
+            for (let option of select.options) {
+                option.selected = selectAll;
+            }
+            // Agar trigger change jika ada JS lain
+            select.dispatchEvent(new Event('change'));
+        }
+    </script>
+
+
 </x-app-layout>

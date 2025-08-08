@@ -213,4 +213,28 @@ class IuranController extends Controller
         return redirect()->route('iuran.setoran.input', [$iuran->id, 'periode_label' => $periode_label])
             ->with('success', 'Setoran berhasil dicatat.');
     }
+
+    public function inputSetoranAjax(Request $request, Iuran $iuran)
+    {
+        $periode_label = $request->get('periode_label');
+        $query = $iuran->kartuKeluargas()->with(['setoranIurans' => function ($q) use ($periode_label, $iuran) {
+            $q->where('periode_label', $periode_label)->where('iuran_id', $iuran->id);
+        }]);
+
+        // AJAX filter: cari KK, No KK, atau kepala keluarga
+        if ($request->filled('q')) {
+            $q = $request->get('q');
+            $query->where(function ($w) use ($q) {
+                $w->where('no_kk', 'like', "%$q%")
+                    ->orWhere('kepala_keluarga', 'like', "%$q%");
+            });
+        }
+
+        $peserta = $query->get();
+
+        // Return hanya isi tabel baris (HTML partial)
+        return response()->json([
+            'html' => view('iuran._table-setoran', compact('peserta', 'iuran', 'periode_label'))->render()
+        ]);
+    }
 }

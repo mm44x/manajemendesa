@@ -5,13 +5,13 @@
         </h2>
     </x-slot>
     <div class="py-4">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg p-6">
 
                 {{-- Pilih/ubah periode --}}
-                <form method="GET" class="mb-6 flex flex-wrap gap-2 items-end">
+                <form method="GET" class="mb-6 flex flex-wrap gap-2 items-center">
                     <input type="hidden" name="iuran_id" value="{{ $iuran->id }}">
-                    <label class="font-bold text-sm">Periode:</label>
+                    <label class="font-bold text-sm flex items-center h-[42px]">Periode:</label>
                     @if ($iuran->tipe === 'sekali')
                         <input type="text" name="periode_label" value="Sekali Bayar"
                             class="rounded border px-3 py-2 bg-gray-200 text-gray-700" readonly>
@@ -28,9 +28,9 @@
                             @endforeach
                             <option value="_custom"
                                 {{ !in_array($periode_label, $daftar_periode->toArray()) && $periode_label ? 'selected' : '' }}>
-                                + Tambah Periode Baru</option>
+                                + Tambah Periode Baru
+                            </option>
                         </select>
-                        {{-- Input custom, nama diubah agar tidak tabrakan --}}
                         <input type="text" id="periode_label_custom" name="periode_label_custom"
                             list="periode_datalist"
                             value="{{ !in_array($periode_label, $daftar_periode->toArray()) && $periode_label ? $periode_label : '' }}"
@@ -42,31 +42,35 @@
                                 <option value="{{ $periode_opt }}">
                             @endforeach
                         </datalist>
-
                         <script>
                             function periodeCustomInput(select) {
                                 const custom = document.getElementById('periode_label_custom');
+                                const submitBtn = document.getElementById('periode-submit-btn');
                                 if (select.value === '_custom') {
                                     custom.style.display = '';
                                     custom.required = true;
+                                    submitBtn.textContent = 'Tambah Periode';
                                 } else {
                                     custom.style.display = 'none';
                                     custom.required = false;
+                                    submitBtn.textContent = 'Lihat Data';
                                 }
                             }
-                            // Trigger on load
                             document.addEventListener('DOMContentLoaded', function() {
                                 periodeCustomInput(document.getElementById('periode_select'));
                             });
                         </script>
                     @endif
+
                     <button id="periode-submit-btn" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                         type="submit">
                         Lihat Data
                     </button>
 
+                    <input type="text" id="filter-kk"
+                        class="rounded px-3 py-2 border bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 ml-auto"
+                        placeholder="Cari No KK / Nama KK...">
                 </form>
-
 
 
                 {{-- Tabel Peserta --}}
@@ -74,61 +78,23 @@
                     @csrf
                     <input type="hidden" name="periode_label" value="{{ $periode_label }}">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full text-xs md:text-sm">
-                            <thead class="bg-gray-100 dark:bg-gray-800">
+                        <table class="min-w-full border text-sm dark:bg-gray-900 dark:text-white">
+                            <thead class="bbg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white">
                                 <tr>
-                                    <th class="border px-2 py-2">No</th>
-                                    <th class="border px-2 py-2">No KK</th>
-                                    <th class="border px-2 py-2">Kepala Keluarga</th>
-                                    <th class="border px-2 py-2">Status</th>
-                                    <th class="border px-2 py-2">Nominal</th>
-                                    <th class="border px-2 py-2">Setor?</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">No</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">No KK</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">Kepala Keluarga</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">Status</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">Nominal</th>
+                                    <th class="border px-2 py-2 whitespace-nowrap">Setor?</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($peserta as $idx => $kk)
-                                    @php
-                                        $setoran = $kk->setoranIurans->first();
-                                        $sudah_setor = $setoran ? true : false;
-                                        $nominal_setor = $sudah_setor
-                                            ? $setoran->nominal_dibayar
-                                            : ($iuran->jenis_setoran === 'tetap'
-                                                ? $iuran->nominal
-                                                : old('nominal.' . $kk->id, ''));
-                                    @endphp
-                                    <tr class="{{ $sudah_setor ? 'bg-green-100 dark:bg-green-900' : '' }}">
-                                        <td class="border px-2 py-2">{{ $idx + 1 }}</td>
-                                        <td class="border px-2 py-2">{{ $kk->no_kk }}</td>
-                                        <td class="border px-2 py-2">{{ $kk->kepala_keluarga }}</td>
-                                        <td class="border px-2 py-2">
-                                            @if ($sudah_setor)
-                                                <span class="text-green-700 font-bold">Sudah Setor</span>
-                                            @else
-                                                <span class="text-red-700 font-bold">Belum Setor</span>
-                                            @endif
-                                        </td>
-                                        <td class="border px-2 py-2">
-                                            @if ($iuran->jenis_setoran === 'tetap')
-                                                <input type="number" min="0"
-                                                    name="nominal[{{ $kk->id }}]" value="{{ $nominal_setor }}"
-                                                    class="rounded px-2 py-1 border w-24 bg-white text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                                                    {{ $sudah_setor ? 'readonly' : '' }}>
-                                            @else
-                                                <input type="number" min="1"
-                                                    name="nominal[{{ $kk->id }}]" value="{{ $nominal_setor }}"
-                                                    class="rounded px-2 py-1 border w-24 bg-white text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                                                    {{ $sudah_setor ? 'readonly' : '' }}>
-                                            @endif
-                                        </td>
-                                        <td class="border px-2 py-2 text-center">
-                                            @if (!$sudah_setor)
-                                                <input type="checkbox" name="setor_kk[]" value="{{ $kk->id }}">
-                                            @else
-                                                <span>-</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            <tbody id="table-peserta-body">
+                                @include('iuran._table-setoran', [
+                                    'peserta' => $peserta,
+                                    'iuran' => $iuran,
+                                    'periode_label' => $periode_label,
+                                ])
                             </tbody>
                         </table>
                     </div>
@@ -222,4 +188,23 @@
             periodeCustomInput(document.getElementById('periode_select'));
         });
     </script>
+
+    <script>
+        let timeout = null;
+        document.getElementById('filter-kk').addEventListener('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                const q = this.value;
+                const periode_label = "{{ $periode_label }}";
+                fetch(
+                        `{{ route('iuran.setoran.input.ajax', $iuran->id) }}?q=${encodeURIComponent(q)}&periode_label=${encodeURIComponent(periode_label)}`
+                    )
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('table-peserta-body').innerHTML = data.html;
+                    });
+            }, 300);
+        });
+    </script>
+
 </x-app-layout>

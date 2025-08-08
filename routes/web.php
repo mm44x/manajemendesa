@@ -57,6 +57,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('iuran/{iuran}/setoran', [IuranController::class, 'inputSetoran'])->name('iuran.setoran.input');
     Route::post('iuran/{iuran}/setoran', [IuranController::class, 'storeSetoran'])->name('iuran.setoran.store');
+
+    Route::get('iuran/{iuran}/input-setoran-ajax', [IuranController::class, 'inputSetoranAjax'])
+        ->name('iuran.setoran.input.ajax')
+        ->middleware('auth');
 });
 
 require __DIR__ . '/auth.php';

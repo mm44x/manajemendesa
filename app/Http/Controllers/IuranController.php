@@ -26,7 +26,7 @@ class IuranController extends Controller
             $query->where('nama_iuran', 'like', '%' . $request->nama_iuran . '%');
         }
 
-        $iurans = $query->latest()->paginate(10)->withQueryString();
+        $iurans = $query->latest()->paginate(10)->appends($request->query());
         $kks = KartuKeluarga::all();
 
         return view('iuran.index', compact('iurans', 'kks'));

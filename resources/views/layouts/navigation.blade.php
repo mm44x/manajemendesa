@@ -22,6 +22,11 @@
                             {{ __('Manajemen KK') }}
                         </x-nav-link>
                     @endif
+                    @if ($role == 'bendahara')
+                        <x-nav-link :href="route('iuran.index')" :active="request()->routeIs('iuran.*')">
+                            {{ __('Manajemen Iuran') }}
+                        </x-nav-link>
+                    @endif
                     <x-nav-link :href="route('semua-warga.index')" :active="request()->routeIs('semua-warga.*')">
                         {{ __('Data Semua Warga') }}
                     </x-nav-link>
@@ -99,6 +104,11 @@
             @if ($role !== 'bendahara')
                 <x-responsive-nav-link :href="route('kartu-keluarga.index')" :active="request()->routeIs('kartu-keluarga.*')">
                     {{ __('Manajemen KK') }}
+                </x-responsive-nav-link>
+            @endif
+            @if ($role == 'bendahara')
+                <x-responsive-nav-link :href="route('iuran.index')" :active="request()->routeIs('iuran.*')">
+                    {{ __('Manajemen Iuran') }}
                 </x-responsive-nav-link>
             @endif
             <x-responsive-nav-link :href="route('semua-warga.index')" :active="request()->routeIs('semua-warga.*')">

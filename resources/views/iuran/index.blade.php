@@ -330,43 +330,35 @@
         }
     </script>
 
+    {{-- Toast Notification (Copy-paste dari KK) --}}
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 items-end pr-4"></div>
-
     <script>
         function showToast(type, message) {
             const colors = {
                 success: {
-                    bg: 'bg-green-100',
-                    border: 'border-green-400',
-                    text: 'text-green-800',
+                    bg: 'bg-green-600 text-white',
                     icon: '✅'
                 },
                 error: {
-                    bg: 'bg-red-100',
-                    border: 'border-red-400',
-                    text: 'text-red-800',
+                    bg: 'bg-red-600 text-white',
                     icon: '❌'
                 }
             };
-
             const toast = document.createElement('div');
             toast.className =
-                `w-[300px] max-w-full px-4 py-3 rounded shadow-lg border ${colors[type].bg} ${colors[type].border} ${colors[type].text} flex items-start gap-3 animate-slidein`;
+                `min-w-[250px] max-w-xs px-4 py-2 rounded shadow-lg mb-2 flex items-center gap-3 ${colors[type].bg} animate-slidein`;
             toast.innerHTML = `
-        <span class="text-xl">${colors[type].icon}</span>
-        <div class="flex-1 text-sm font-medium">${message}</div>
-        <button onclick="this.parentElement.remove()" class="font-bold text-lg leading-none ml-2 hover:text-black">&times;</button>
-    `;
-
+            <span class="text-xl">${colors[type].icon}</span>
+            <div class="flex-1 text-sm font-medium">${message}</div>
+            <button onclick="this.parentElement.remove()" class="font-bold text-lg leading-none ml-2 hover:text-black">&times;</button>
+        `;
             document.getElementById('toast-container').appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.add('opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+                setTimeout(() => toast.remove(), 400);
+            }, 2200);
         }
     </script>
-
     <style>
         @keyframes slidein {
             from {
@@ -384,25 +376,22 @@
             animation: slidein 0.3s ease-out;
         }
     </style>
-
-
     @if (session('success'))
         <script>
             showToast('success', @json(session('success')));
         </script>
     @endif
-
     @if (session('error'))
         <script>
             showToast('error', @json(session('error')));
         </script>
     @endif
-
     @if ($errors->any())
         <script>
             showToast('error', @json($errors->first()));
         </script>
     @endif
+
 
     <style>
         .pagination .page-link {

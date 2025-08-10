@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Iuran;
 use App\Models\SetoranIuran;
 use App\Models\KartuKeluarga;
+use App\Models\AnggotaKeluarga;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -90,7 +92,54 @@ class DashboardController extends Controller
                 'nominal_per_bulan'
             ));
         }
+        if ($role === 'sekretaris') {
+            $totalKK = KartuKeluarga::count();
+            $totalAnggota = AnggotaKeluarga::count();
+            $kkBaruBulanIni = KartuKeluarga::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+            $kkTanpaAnggota = KartuKeluarga::doesntHave('anggotaKeluargas')->count();
 
-        return view('dashboard', compact('role', 'summary', 'setoran_terbaru'));
+            $summary = [
+                'total_kk' => $totalKK,
+                'total_anggota' => $totalAnggota,
+                'kk_baru_bulan_ini' => $kkBaruBulanIni,
+                'kk_tanpa_anggota' => $kkTanpaAnggota
+            ];
+
+            $kk_terbaru = KartuKeluarga::orderByDesc('created_at')->limit(10)->get();
+            $anggota_terbaru = AnggotaKeluarga::with('kartuKeluarga')->orderByDesc('created_at')->limit(10)->get();
+
+            return view('dashboard', compact('role', 'summary', 'kk_terbaru', 'anggota_terbaru'));
+        }
+
+        if ($role === 'admin') {
+            $totalUsers = User::count();
+            $usersPerRole = User::select('role', DB::raw('COUNT(*) as c'))->groupBy('role')->pluck('c', 'role');
+
+            $totalKK = KartuKeluarga::count();
+            $totalAnggota = AnggotaKeluarga::count();
+            $totalIuran = Iuran::count();
+
+            $bulanIni = now()->month;
+            $tahunIni = now()->year;
+            $nominalSetoranBulanIni = SetoranIuran::whereMonth('tanggal_setor', $bulanIni)
+                ->whereYear('tanggal_setor', $tahunIni)
+                ->sum('nominal_dibayar');
+
+            $kkTerbaru = KartuKeluarga::orderByDesc('created_at')->limit(8)->get();
+            $iuranTerbaru = Iuran::orderByDesc('created_at')->limit(8)->get();
+
+            return view('dashboard', compact(
+                'role',
+                'totalUsers',
+                'usersPerRole',
+                'totalKK',
+                'totalAnggota',
+                'totalIuran',
+                'nominalSetoranBulanIni',
+                'kkTerbaru',
+                'iuranTerbaru'
+            ));
+        }
+        return view('dashboard', compact('role'));
     }
 }

@@ -111,8 +111,197 @@
 
             @endif
 
-            @if ($role === 'bendahara')
+            @if ($role === 'sekretaris')
+                {{-- Ringkasan --}}
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-2">
+                    <div class="p-4 text-gray-900 dark:text-white">
+                        <div class="grid md:grid-cols-4 gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-900 rounded shadow p-4 text-center">
+                                <div class="text-xl font-bold text-blue-700 dark:text-blue-300">
+                                    {{ $summary['total_kk'] ?? 0 }}</div>
+                                <div class="text-gray-500 dark:text-gray-300">Total KK</div>
+                            </div>
+                            <div class="bg-emerald-50 dark:bg-emerald-900 rounded shadow p-4 text-center">
+                                <div class="text-xl font-bold text-emerald-700 dark:text-emerald-300">
+                                    {{ $summary['total_anggota'] ?? 0 }}</div>
+                                <div class="text-gray-500 dark:text-gray-300">Total Anggota</div>
+                            </div>
+                            <div class="bg-yellow-50 dark:bg-yellow-900 rounded shadow p-4 text-center">
+                                <div class="text-xl font-bold text-yellow-700 dark:text-yellow-300">
+                                    {{ $summary['kk_baru_bulan_ini'] ?? 0 }}</div>
+                                <div class="text-gray-500 dark:text-gray-300">KK Baru Bulan Ini</div>
+                            </div>
+                            <div class="bg-red-50 dark:bg-red-900 rounded shadow p-4 text-center">
+                                <div class="text-xl font-bold text-red-700 dark:text-red-300">
+                                    {{ $summary['kk_tanpa_anggota'] ?? 0 }}</div>
+                                <div class="text-gray-500 dark:text-gray-300">KK Tanpa Anggota</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Aktivitas Terbaru --}}
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4 text-gray-900 dark:text-white">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <div class="font-bold">KK Terbaru</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">10 entri terakhir</div>
+                                </div>
+                            </div>
+                            <ul>
+                                @forelse($kk_terbaru ?? [] as $kk)
+                                    <li class="border-b py-2 flex justify-between items-center">
+                                        <span class="font-medium">{{ $kk->kepala_keluarga }}
+                                            ({{ $kk->no_kk }})
+                                        </span>
+                                        <span
+                                            class="text-xs text-gray-500">{{ $kk->created_at?->translatedFormat('d M Y') }}</span>
+                                    </li>
+                                @empty
+                                    <li class="py-2 text-gray-400">Belum ada data.</li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4 text-gray-900 dark:text-white">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <div class="font-bold">Anggota Terbaru</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">10 entri terakhir</div>
+                                </div>
+                            </div>
+                            <ul>
+                                @forelse($anggota_terbaru ?? [] as $ag)
+                                    <li
+                                        class="border-b py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+                                        <span class="font-medium">{{ $ag->nama }} ({{ $ag->nik }})</span>
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-sm text-gray-600 dark:text-gray-300">
+                                                KK: {{ $ag->kartuKeluarga->kepala_keluarga ?? '-' }}
+                                            </span>
+                                            <span class="text-xs text-gray-500">
+                                                {{ $ag->created_at?->translatedFormat('d M Y') }}
+                                            </span>
+                                        </div>
+                                    </li>
+                                @empty
+                                    <li class="py-2 text-gray-400">Belum ada data.</li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             @endif
+
+            @if ($role === 'admin')
+                {{-- Kartu Ringkasan --}}
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-3">
+                    <div class="p-4 text-gray-900 dark:text-white">
+                        <div class="grid md:grid-cols-5 gap-4">
+                            <div class="rounded shadow p-4 bg-slate-50 dark:bg-slate-900 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Total Pengguna</div>
+                                <div class="text-2xl font-bold">{{ $totalUsers ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-blue-50 dark:bg-blue-900 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-300">Admin</div>
+                                <div class="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                                    {{ $usersPerRole['admin'] ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-emerald-50 dark:bg-emerald-900 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-300">Sekretaris</div>
+                                <div class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
+                                    {{ $usersPerRole['sekretaris'] ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-yellow-50 dark:bg-yellow-900 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-300">Bendahara</div>
+                                <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
+                                    {{ $usersPerRole['bendahara'] ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-indigo-50 dark:bg-indigo-900 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-300">Setoran Bulan Ini</div>
+                                <div class="text-xl font-bold text-indigo-700 dark:text-indigo-300">Rp
+                                    {{ number_format($nominalSetoranBulanIni ?? 0, 0, ',', '.') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Kartu Ringkasan Data Master --}}
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-3">
+                    <div class="p-4 text-gray-900 dark:text-white">
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="rounded shadow p-4 bg-white dark:bg-gray-900">
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Total KK</div>
+                                <div class="text-2xl font-bold">{{ $totalKK ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-white dark:bg-gray-900">
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Total Anggota</div>
+                                <div class="text-2xl font-bold">{{ $totalAnggota ?? 0 }}</div>
+                            </div>
+                            <div class="rounded shadow p-4 bg-white dark:bg-gray-900">
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Total Iuran</div>
+                                <div class="text-2xl font-bold">{{ $totalIuran ?? 0 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Aktivitas Terbaru & Aksi Cepat --}}
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4 text-gray-900 dark:text-white">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <div class="font-bold">KK Terbaru</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">8 entri terakhir</div>
+                                </div>
+                                <a href="{{ route('kartu-keluarga.index') }}"
+                                    class="text-sm px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700">Kelola
+                                    KK</a>
+                            </div>
+                            <ul>
+                                @forelse($kkTerbaru ?? [] as $kk)
+                                    <li class="border-b py-2 flex justify-between items-center">
+                                        <span class="font-medium">{{ $kk->kepala_keluarga }}
+                                            ({{ $kk->no_kk }})</span>
+                                        <span
+                                            class="text-xs text-gray-500">{{ $kk->created_at?->translatedFormat('d M Y') }}</span>
+                                    </li>
+                                @empty
+                                    <li class="py-2 text-gray-400">Belum ada data.</li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4 text-gray-900 dark:text-white">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <div class="font-bold">Iuran Terbaru</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">8 entri terakhir</div>
+                                </div>
+                                <a href="{{ route('iuran.index') }}"
+                                    class="text-sm px-3 py-1 rounded bg-emerald-600 text-white hover:bg-emerald-700">Kelola
+                                    Iuran</a>
+                            </div>
+                            <ul>
+                                @forelse($iuranTerbaru ?? [] as $iu)
+                                    <li class="border-b py-2 flex justify-between items-center">
+                                        <span class="font-medium">{{ $iu->nama_iuran }}</span>
+                                        <span
+                                            class="text-xs text-gray-500">{{ $iu->created_at?->translatedFormat('d M Y') }}</span>
+                                    </li>
+                                @empty
+                                    <li class="py-2 text-gray-400">Belum ada data.</li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             {{-- Role lain bisa ditambah disini --}}
         </div>
     </div>
@@ -133,7 +322,7 @@
                 const applyLatestLimit = (n) => {
                     latestItems.forEach((li, idx) => {
                         li.style.display = idx < n ? 'flex' :
-                        'none'; // pakai flex agar sesuai class Tailwind
+                            'none'; // pakai flex agar sesuai class Tailwind
                     });
                 };
 

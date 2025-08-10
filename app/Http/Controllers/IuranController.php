@@ -13,7 +13,7 @@ class IuranController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (auth()->user()->role !== 'bendahara') {
+            if (auth()->user()->role == 'sekretaris') {
                 abort(403);
             }
             return $next($request);

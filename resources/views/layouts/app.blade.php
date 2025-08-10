@@ -38,6 +38,15 @@
         <main>
             {{ $slot }}
         </main>
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-xs text-gray-500 dark:text-gray-400 pb-4">
+            <hr class="mb-2 border-gray-300 dark:border-gray-700">
+            <div>
+                &copy; {{ date('Y') }} Aplikasi Manajemen Warga —
+                Dibuat oleh <span class="font-semibold text-blue-600 dark:text-blue-400">Pratama Ardy Prayoga</span>.
+                <span class="hidden sm:inline">All rights reserved.</span>
+            </div>
+        </footer>
     </div>
 </body>
 

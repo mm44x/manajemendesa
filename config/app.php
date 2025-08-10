@@ -16,6 +16,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'allow_register' => env('ALLOW_REGISTER', false),
+
 
     /*
     |--------------------------------------------------------------------------
